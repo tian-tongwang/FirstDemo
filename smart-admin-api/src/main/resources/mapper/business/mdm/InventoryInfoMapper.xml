@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.mdm.dao.InventoryInfoDao">
+
+    <resultMap id="InventoryInfoVO" type="net.lab1024.smartadmin.module.business.mdm.domain.vo.InventoryInfoVO"></resultMap>
+    <resultMap id="InventoryInfoExcelVO" type="net.lab1024.smartadmin.module.business.mdm.domain.vo.InventoryInfoExcelVO"></resultMap>
+
+
+    <select id="queryByPage" resultMap="InventoryInfoVO">
+        select
+          inv_code,
+          inv_name,
+          inv_unit,
+          sort_code,
+          sort_name,
+          brand_code,
+          brand_name,
+          create_time,
+          update_time,
+        create_by,
+        update_by
+        from t_inventory_info
+        <where>
+            <if test="queryDTO.invName != null and queryDTO.invName != ''">
+                AND INSTR(inv_name,#{queryDTO.invName})
+            </if>
+            <if test="queryDTO.invCode != null and queryDTO.invCode != ''">
+                AND inv_code = #{queryDTO.invCode}
+            </if>
+            <if test="queryDTO.sortCode != null and queryDTO.sortCode != ''">
+                AND sort_code = #{queryDTO.sortCode}
+            </if>
+            <if test="queryDTO.sortName != null and queryDTO.sortName != ''">
+                AND INSTR(sort_name,#{queryDTO.sortName})
+            </if>
+            <if test="queryDTO.brandName != null and queryDTO.brandName != ''">
+                AND INSTR(brand_name,#{queryDTO.brandName})
+            </if>
+            <if test="queryDTO.brandCode != null and queryDTO.brandCode != ''">
+                AND brand_code = #{queryDTO.brandCode}
+            </if>
+            <if test="queryDTO.invUnit != null and queryDTO.invUnit != ''">
+                AND inv_unit = #{queryDTO.invUnit}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="InventoryInfoExcelVO">
+        select
+           inv_code,
+           inv_name,
+           inv_unit,
+           sort_code,
+           sort_name,
+           brand_code,
+           brand_name,
+           create_time,
+           update_time,
+        create_by,
+        update_by
+        from t_inventory_info
+        <where>
+            <if test="queryDTO.invName != null and queryDTO.invName != ''">
+                AND INSTR(inv_name,#{queryDTO.invName})
+            </if>
+            <if test="queryDTO.invCode != null and queryDTO.invCode != ''">
+                AND inv_code = #{queryDTO.invCode}
+            </if>
+            <if test="queryDTO.sortCode != null and queryDTO.sortCode != ''">
+                AND sort_code = #{queryDTO.sortCode}
+            </if>
+            <if test="queryDTO.sortName != null and queryDTO.sortName != ''">
+                AND INSTR(sort_name,#{queryDTO.sortName})
+            </if>
+            <if test="queryDTO.brandName != null and queryDTO.brandName != ''">
+                AND INSTR(brand_name,#{queryDTO.brandName})
+            </if>
+            <if test="queryDTO.brandCode != null and queryDTO.brandCode != ''">
+                AND brand_code = #{queryDTO.brandCode}
+            </if>
+            <if test="queryDTO.invUnit != null and queryDTO.invUnit != ''">
+                AND inv_unit = #{queryDTO.invUnit}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="InventoryInfoExcelVO">
+        select
+         inv_code,
+         inv_name,
+         inv_unit,
+         sort_code,
+         sort_name,
+         brand_code,
+         brand_name,
+         create_time,
+         update_time,
+        create_by,
+        update_by
+        from t_inventory_info
+        where inv_code in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <delete id="deleteById">
+        delete from t_inventory_info where inv_code = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from t_inventory_info where inv_code in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="querySortInfo" resultMap="InventoryInfoVO">
+        select distinct sort_code,sort_name from t_inventory_info
+    </select>
+
+    <select id="queryBrandInfo" resultMap="InventoryInfoVO">
+        select distinct brand_code,brand_name from t_inventory_info
+    </select>
+</mapper>

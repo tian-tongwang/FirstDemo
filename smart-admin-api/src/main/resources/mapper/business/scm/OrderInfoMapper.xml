@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.scm.dao.OrderInfoDao">
+
+    <resultMap id="OrderInfoVO" type="net.lab1024.smartadmin.module.business.scm.domain.vo.OrderInfoVO"></resultMap>
+    <resultMap id="OrderInfoExcelVO" type="net.lab1024.smartadmin.module.business.scm.domain.vo.OrderInfoExcelVO"></resultMap>
+
+
+    <select id="queryByPage" resultMap="OrderInfoVO">
+        select
+          bill_code,
+          btype_code,
+          btype_name,
+          order_date,
+          wh_code,
+          wh_name,
+          delivery_date,
+          ot_name,
+        create_by,
+        create_time,
+        update_by,
+        update_time
+        from t_order_info
+        <where>
+            <if test="queryDTO.billCode != null and queryDTO.billCode != ''">
+                AND bill_code = #{queryDTO.billCode}
+            </if>
+            <if test="queryDTO.btypeCode != null and queryDTO.btypeCode != ''">
+                AND btype_code = #{queryDTO.btypeCode}
+            </if>
+            <if test="queryDTO.btypeName != null and queryDTO.btypeName != ''">
+                AND INSTR(btype_name,#{queryDTO.btypeName})
+            </if>
+            <if test="queryDTO.orderDate != null">
+                AND order_date = #{queryDTO.orderDate}
+            </if>
+            <if test="queryDTO.whCode != null and queryDTO.whCode != ''">
+                AND wh_code = #{queryDTO.whCode}
+            </if>
+            <if test="queryDTO.whName != null and queryDTO.whName != ''">
+                AND INSTR(wh_name,#{queryDTO.whName})
+            </if>
+            <if test="queryDTO.deliveryDate != null">
+                AND delivery_date = #{queryDTO.deliveryDate}
+            </if>
+            <if test="queryDTO.otName != null and queryDTO.otName != ''">
+                AND ot_name = #{queryDTO.otName}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="OrderInfoExcelVO">
+        select
+           bill_code,
+           btype_code,
+           btype_name,
+           order_date,
+           wh_code,
+           wh_name,
+           delivery_date,
+           ot_name,
+        create_by,
+        create_time,
+        update_by,
+        update_time
+        from t_order_info
+        <where>
+            <if test="queryDTO.billCode != null and queryDTO.billCode != ''">
+                AND bill_code = #{queryDTO.billCode}
+            </if>
+            <if test="queryDTO.btypeCode != null and queryDTO.btypeCode != ''">
+                AND btype_code = #{queryDTO.btypeCode}
+            </if>
+            <if test="queryDTO.btypeName != null and queryDTO.btypeName != ''">
+                AND INSTR(btype_name,#{queryDTO.btypeName})
+            </if>
+            <if test="queryDTO.orderDate != null">
+                AND order_date = #{queryDTO.orderDate}
+            </if>
+            <if test="queryDTO.whCode != null and queryDTO.whCode != ''">
+                AND wh_code = #{queryDTO.whCode}
+            </if>
+            <if test="queryDTO.whName != null and queryDTO.whName != ''">
+                AND INSTR(wh_name,#{queryDTO.whName})
+            </if>
+            <if test="queryDTO.deliveryDate != null">
+                AND delivery_date = #{queryDTO.deliveryDate}
+            </if>
+            <if test="queryDTO.otName != null and queryDTO.otName != ''">
+                AND ot_name = #{queryDTO.otName}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="OrderInfoExcelVO">
+        select
+         bill_code,
+         btype_code,
+         btype_name,
+         order_date,
+         wh_code,
+         wh_name,
+         delivery_date,
+         ot_name,
+        create_by,
+        create_time,
+        update_by,
+        update_time
+        from t_order_info
+        where bill_code in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <delete id="deleteById">
+        delete from t_order_info where bill_code = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from t_order_info where bill_code in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

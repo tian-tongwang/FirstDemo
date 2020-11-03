@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.mdm.dao.BtypeInfoDao">
+
+    <resultMap id="BtypeInfoVO" type="net.lab1024.smartadmin.module.business.mdm.domain.vo.BtypeInfoVO"></resultMap>
+    <resultMap id="BtypeInfoExcelVO" type="net.lab1024.smartadmin.module.business.mdm.domain.vo.BtypeInfoExcelVO"></resultMap>
+
+
+    <select id="queryByPage" resultMap="BtypeInfoVO">
+        select
+          btype_code,
+          btype_name,
+          create_time,
+          update_time,
+          create_by,
+          update_by,
+        btype_sort_name
+        from t_btype_info
+        <where>
+            <if test="queryDTO.btypeCode != null and queryDTO.btypeCode != ''">
+                AND btype_code = #{queryDTO.btypeCode}
+            </if>
+            <if test="queryDTO.btypeName != null and queryDTO.btypeName != ''">
+                AND INSTR(btype_name,#{queryDTO.btypeName})
+            </if>
+            <if test="queryDTO.btypeSortName != null and queryDTO.btypeSortName != ''">
+                AND btype_sort_name = #{queryDTO.btypeSortName}
+            </if>
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="BtypeInfoExcelVO">
+        select
+           btype_code,
+           btype_name,
+           create_time,
+           update_time,
+            create_by,
+            update_by,
+        btype_sort_name
+        from t_btype_info
+        <where>
+            <if test="queryDTO.btypeCode != null and queryDTO.btypeCode != ''">
+                AND btype_code = #{queryDTO.btypeCode}
+            </if>
+            <if test="queryDTO.btypeName != null and queryDTO.btypeName != ''">
+                AND INSTR(btype_name,#{queryDTO.btypeName})
+            </if>
+            <if test="queryDTO.btypeSortName != null and queryDTO.btypeSortName != ''">
+                AND btype_sort_name = #{queryDTO.btypeSortName}
+            </if>
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="BtypeInfoExcelVO">
+        select
+         btype_code,
+         btype_name,
+         create_time,
+         update_time,
+        create_by,
+        update_by,
+        btype_sort_name
+        from t_btype_info
+        where btype_code in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <delete id="deleteById">
+        delete from t_btype_info where btype_code = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from t_btype_info where btype_code in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="queryBtypeInfoList" resultMap="BtypeInfoVO">
+        sekect distinct btype_code,btype_name from t_btype_info where 1=1
+        <if test="queryDTO.btypeSortName != null and queryDTO.btypeSortName != ''">
+            AND btype_sort_name = #{queryDTO.btypeSortName}
+        </if>
+    </select>
+</mapper>
